@@ -1,4 +1,4 @@
-module github.com/agentplexus/ogen-tools
+module github.com/plexusone/ogen-tools
 
 go 1.24.0
 

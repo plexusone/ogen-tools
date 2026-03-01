@@ -39,7 +39,7 @@ func run(args []string) error {
 
 	filename := args[0]
 
-	content, err := os.ReadFile(filename)
+	content, err := os.ReadFile(filename) //nolint:gosec // G703: CLI tool, filename from trusted args
 	if err != nil {
 		return fmt.Errorf("read file: %w", err)
 	}
@@ -51,7 +51,7 @@ func run(args []string) error {
 		return nil
 	}
 
-	if err := os.WriteFile(filename, fixed, 0600); err != nil {
+	if err := os.WriteFile(filename, fixed, 0600); err != nil { //nolint:gosec // G703: CLI tool, filename from trusted args
 		return fmt.Errorf("write file: %w", err)
 	}
 
