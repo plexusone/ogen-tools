@@ -8,5 +8,5 @@ require (
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/go-faster/errors v0.7.1 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 )
