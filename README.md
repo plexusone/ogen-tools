@@ -16,6 +16,7 @@ This repo provides post-processing tools to work around known issues until they'
 |------|-------------|-------|
 | [ogen-fixnull](cmd/ogen-fixnull/) | Fix null handling in `Opt*` types | [#1358](https://github.com/ogen-go/ogen/issues/1358) |
 | [ogen-fixerror](cmd/ogen-fixerror/) | Preserve error response bodies | - |
+| [ogen-fixformdata](cmd/ogen-fixformdata/) | Fix form-data encoding of empty JSON arrays/objects | - |
 
 ## Packages
 
@@ -31,7 +32,7 @@ Fixes JSON decoding errors when APIs return `null` for nullable `$ref` fields.
 
 **Install:**
 ```bash
-go install github.com/agentplexus/ogen-tools/cmd/ogen-fixnull@latest
+go install github.com/plexusone/ogen-tools/cmd/ogen-fixnull@latest
 ```
 
 **Use:**
@@ -42,7 +43,7 @@ ogen-fixnull internal/api/oas_json_gen.go
 
 **Or without installing:**
 ```bash
-go run github.com/agentplexus/ogen-tools/cmd/ogen-fixnull@latest internal/api/oas_json_gen.go
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixnull@latest internal/api/oas_json_gen.go
 ```
 
 See [cmd/ogen-fixnull/README.md](cmd/ogen-fixnull/README.md) for detailed documentation.
@@ -61,7 +62,24 @@ ogen-fixerror internal/api/oas_response_decoders_gen.go
 
 **Or without installing:**
 ```bash
-go run github.com/agentplexus/ogen-tools/cmd/ogen-fixerror@latest internal/api/oas_response_decoders_gen.go
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixerror@latest internal/api/oas_response_decoders_gen.go
+```
+
+### ogen-fixformdata
+
+Fixes form-data encoding that sends empty strings for nil array/object fields.
+
+**Problem:** ogen's form-data encoders unconditionally encode JSON fields even when they're nil, sending empty strings that cause API 400 errors like "Invalid additional format options".
+
+**Use:**
+```bash
+ogen --package api --target internal/api --clean openapi.json
+ogen-fixformdata internal/api/oas_request_encoders_gen.go
+```
+
+**Or without installing:**
+```bash
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixformdata@latest internal/api/oas_request_encoders_gen.go
 ```
 
 ### ogenerror
@@ -69,7 +87,7 @@ go run github.com/agentplexus/ogen-tools/cmd/ogen-fixerror@latest internal/api/o
 Extract error details from ogen client errors:
 
 ```go
-import "github.com/agentplexus/ogen-tools/ogenerror"
+import "github.com/plexusone/ogen-tools/ogenerror"
 
 resp, err := client.SomeMethod(ctx, req)
 if err != nil {
@@ -94,8 +112,9 @@ set -e
 ogen --package api --target internal/api --clean openapi.json
 
 # Post-process: Fix ogen bugs
-go run github.com/agentplexus/ogen-tools/cmd/ogen-fixnull@latest internal/api/oas_json_gen.go
-go run github.com/agentplexus/ogen-tools/cmd/ogen-fixerror@latest internal/api/oas_response_decoders_gen.go
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixnull@latest internal/api/oas_json_gen.go
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixerror@latest internal/api/oas_response_decoders_gen.go
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixformdata@latest internal/api/oas_request_encoders_gen.go
 
 # Verify
 go build ./...
@@ -109,15 +128,15 @@ Found another ogen issue that needs a workaround? PRs welcome.
 
 MIT
 
- [build-status-svg]: https://github.com/agentplexus/ogen-tools/actions/workflows/ci.yaml/badge.svg?branch=main
- [build-status-url]: https://github.com/agentplexus/ogen-tools/actions/workflows/ci.yaml
- [lint-status-svg]: https://github.com/agentplexus/ogen-tools/actions/workflows/lint.yaml/badge.svg?branch=main
- [lint-status-url]: https://github.com/agentplexus/ogen-tools/actions/workflows/lint.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/agentplexus/ogen-tools
- [goreport-url]: https://goreportcard.com/report/github.com/agentplexus/ogen-tools
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/agentplexus/ogen-tools
- [docs-godoc-url]: https://pkg.go.dev/github.com/agentplexus/ogen-tools
+ [build-status-svg]: https://github.com/plexusone/ogen-tools/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/plexusone/ogen-tools/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/plexusone/ogen-tools/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/plexusone/ogen-tools/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/ogen-tools
+ [goreport-url]: https://goreportcard.com/report/github.com/plexusone/ogen-tools
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/ogen-tools
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/ogen-tools
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/agentplexus/ogen-tools/blob/master/LICENSE
- [used-by-svg]: https://sourcegraph.com/github.com/agentplexus/ogen-tools/-/badge.svg
- [used-by-url]: https://sourcegraph.com/github.com/agentplexus/ogen-tools?badge
+ [license-url]: https://github.com/plexusone/ogen-tools/blob/master/LICENSE
+ [used-by-svg]: https://sourcegraph.com/github.com/plexusone/ogen-tools/-/badge.svg
+ [used-by-url]: https://sourcegraph.com/github.com/plexusone/ogen-tools?badge

@@ -7,6 +7,31 @@
   "maintainers": ["grokify", "johncwang@gmail.com"],
   "releases": [
     {
+      "version": "v0.3.0",
+      "date": "2026-06-15",
+      "highlights": [
+        { "description": "New `ogen-fixformdata` tool to fix form-data encoding of empty JSON arrays/objects" }
+      ],
+      "added": [
+        { "description": "`ogen-fixformdata` CLI tool to fix form-data encoding that sends empty strings for nil array/object fields", "commit": "21642dd" }
+      ],
+      "documentation": [
+        { "description": "Release notes for v0.1.0, v0.2.0, and v0.3.0", "commit": "21642dd" }
+      ]
+    },
+    {
+      "version": "v0.2.1",
+      "date": "2026-03-15",
+      "dependencies": [
+        { "description": "Bump `github.com/ogen-go/ogen` from 1.20.0 to 1.20.1", "commit": "37df1de" }
+      ],
+      "build": [
+        { "description": "Update CI workflows to use shared workflows", "commit": "b9fa952" },
+        { "description": "Rename CI workflow files", "commit": "3cb8fb4" },
+        { "description": "Update Go module dependencies", "commit": "e27af6b" }
+      ]
+    },
+    {
       "version": "v0.2.0",
       "date": "2026-02-28",
       "highlights": [
