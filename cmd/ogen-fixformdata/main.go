@@ -39,7 +39,7 @@ func run(args []string) error {
 
 	filename := args[0]
 
-	content, err := os.ReadFile(filename) // #nosec G304 -- CLI tool, filename from trusted args
+	content, err := os.ReadFile(filename) //nolint:gosec // CLI tool, filename from trusted args
 	if err != nil {
 		return fmt.Errorf("read file: %w", err)
 	}
@@ -51,7 +51,7 @@ func run(args []string) error {
 		return nil
 	}
 
-	if err := os.WriteFile(filename, fixed, 0600); err != nil { // #nosec G306 -- CLI tool, filename from trusted args
+	if err := os.WriteFile(filename, fixed, 0600); err != nil { //nolint:gosec // CLI tool, filename from trusted args
 		return fmt.Errorf("write file: %w", err)
 	}
 
@@ -116,11 +116,11 @@ func FixFormDataEmptyJSON(content []byte) ([]byte, int) {
 
 		// Build replacement: }(&enc) + whitespace + if len check + return + closing
 		var result bytes.Buffer
-		result.Write(submatches[1])                          // }(&enc)
-		result.Write(submatches[2])                          // whitespace
+		result.Write(submatches[1])                             // }(&enc)
+		result.Write(submatches[2])                             // whitespace
 		result.WriteString("if len(enc.Bytes()) > 0 {\n\t\t\t") // open if
-		result.Write(submatches[3])                          // return e.EncodeValue(...)
-		result.WriteString("\n\t\t}\n\t\treturn nil")        // close if and return nil
+		result.Write(submatches[3])                             // return e.EncodeValue(...)
+		result.WriteString("\n\t\t}\n\t\treturn nil")           // close if and return nil
 
 		return result.Bytes()
 	})
