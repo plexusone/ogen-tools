@@ -6,3 +6,9 @@ coverage.txt
 debug.test
 main
 main.zip
+
+# Built binaries (root only)
+/ogen-fixbinary
+/ogen-fixerror
+/ogen-fixformdata
+/ogen-fixnull
