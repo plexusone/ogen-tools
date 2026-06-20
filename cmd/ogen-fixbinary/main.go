@@ -30,7 +30,7 @@ func main() {
 	encodersFile := os.Args[2]
 
 	// Fix schemas
-	schemasContent, err := os.ReadFile(schemasFile)
+	schemasContent, err := os.ReadFile(schemasFile) //nolint:gosec // CLI tool, filename from args
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading %s: %v\n", schemasFile, err)
 		os.Exit(1)
@@ -38,7 +38,7 @@ func main() {
 
 	fixedSchemas, schemasCount := FixSchemasBinaryFields(schemasContent)
 	if schemasCount > 0 {
-		if err := os.WriteFile(schemasFile, fixedSchemas, 0644); err != nil {
+		if err := os.WriteFile(schemasFile, fixedSchemas, 0600); err != nil { //nolint:gosec // CLI tool
 			fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", schemasFile, err)
 			os.Exit(1)
 		}
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	// Fix encoders
-	encodersContent, err := os.ReadFile(encodersFile)
+	encodersContent, err := os.ReadFile(encodersFile) //nolint:gosec // CLI tool, filename from args
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading %s: %v\n", encodersFile, err)
 		os.Exit(1)
@@ -56,7 +56,7 @@ func main() {
 
 	fixedEncoders, encodersCount := FixEncodersBinaryFields(encodersContent)
 	if encodersCount > 0 {
-		if err := os.WriteFile(encodersFile, fixedEncoders, 0644); err != nil {
+		if err := os.WriteFile(encodersFile, fixedEncoders, 0600); err != nil { //nolint:gosec // CLI tool
 			fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", encodersFile, err)
 			os.Exit(1)
 		}
