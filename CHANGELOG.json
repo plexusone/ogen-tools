@@ -8,12 +8,17 @@
   "releases": [
     {
       "version": "v0.3.0",
-      "date": "2026-06-15",
+      "date": "2026-06-20",
       "highlights": [
-        { "description": "New `ogen-fixformdata` tool to fix form-data encoding of empty JSON arrays/objects" }
+        { "description": "Three new tools: `ogen-fixformdata`, `ogen-fixbinary`, and `ogen-fixnull31`" }
       ],
       "added": [
-        { "description": "`ogen-fixformdata` CLI tool to fix form-data encoding that sends empty strings for nil array/object fields", "commit": "21642dd" }
+        { "description": "`ogen-fixformdata` CLI tool to fix form-data encoding that sends empty strings for nil array/object fields", "commit": "21642dd" },
+        { "description": "`ogen-fixbinary` CLI tool to fix nullable binary file fields in multipart form encoders", "commit": "865031a" },
+        { "description": "`ogen-fixnull31` CLI tool to preprocess OpenAPI 3.1 specs, converting nullable type arrays to 3.0 format", "commit": "4ffc38a" }
+      ],
+      "dependencies": [
+        { "description": "Add `gopkg.in/yaml.v3` for YAML processing in ogen-fixnull31", "commit": "4ffc38a" }
       ],
       "documentation": [
         { "description": "Release notes for v0.1.0, v0.2.0, and v0.3.0", "commit": "21642dd" }

@@ -17,6 +17,8 @@ This repo provides post-processing tools to work around known issues until they'
 | [ogen-fixnull](cmd/ogen-fixnull/) | Fix null handling in `Opt*` types | [#1358](https://github.com/ogen-go/ogen/issues/1358) |
 | [ogen-fixerror](cmd/ogen-fixerror/) | Preserve error response bodies | - |
 | [ogen-fixformdata](cmd/ogen-fixformdata/) | Fix form-data encoding of empty JSON arrays/objects | - |
+| [ogen-fixbinary](cmd/ogen-fixbinary/) | Fix nullable binary file fields in multipart forms | - |
+| [ogen-fixnull31](cmd/ogen-fixnull31/) | Preprocess OpenAPI 3.1 nullable type arrays for ogen | [#880](https://github.com/ogen-go/ogen/issues/880) |
 
 ## Packages
 
@@ -82,6 +84,41 @@ ogen-fixformdata internal/api/oas_request_encoders_gen.go
 go run github.com/plexusone/ogen-tools/cmd/ogen-fixformdata@latest internal/api/oas_request_encoders_gen.go
 ```
 
+### ogen-fixbinary
+
+Fixes nullable binary file fields in multipart form encoders.
+
+**Problem:** When an OpenAPI spec has a binary field with `nullable: true`, ogen generates `OptNilString` instead of `OptMultipartFile`, causing file uploads to be encoded as string fields.
+
+**Use:**
+```bash
+ogen --package api --target internal/api --clean openapi.json
+ogen-fixbinary internal/api/oas_schemas_gen.go internal/api/oas_request_encoders_gen.go
+```
+
+**Or without installing:**
+```bash
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixbinary@latest internal/api/oas_schemas_gen.go internal/api/oas_request_encoders_gen.go
+```
+
+### ogen-fixnull31
+
+Preprocesses OpenAPI 3.1 specs for ogen compatibility.
+
+**Problem:** ogen cannot parse OpenAPI 3.1 specs that use the nullable type array syntax (`type: [string, "null"]`). This tool converts them to OpenAPI 3.0 format (`type: string` + `nullable: true`).
+
+**Use:**
+```bash
+# Preprocess spec before running ogen
+ogen-fixnull31 openapi.yaml -o openapi-fixed.yaml
+ogen --package api --target internal/api --clean openapi-fixed.yaml
+```
+
+**Or without installing:**
+```bash
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixnull31@latest openapi.yaml -o openapi-fixed.yaml
+```
+
 ### ogenerror
 
 Extract error details from ogen client errors:
@@ -108,13 +145,17 @@ set -e
 # Prerequisites:
 #   go install github.com/ogen-go/ogen/cmd/ogen@latest
 
+# Preprocess OpenAPI 3.1 spec (if needed)
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixnull31@latest openapi.yaml -o openapi-ogen.yaml
+
 # Generate API code
-ogen --package api --target internal/api --clean openapi.json
+ogen --package api --target internal/api --clean openapi-ogen.yaml
 
 # Post-process: Fix ogen bugs
 go run github.com/plexusone/ogen-tools/cmd/ogen-fixnull@latest internal/api/oas_json_gen.go
 go run github.com/plexusone/ogen-tools/cmd/ogen-fixerror@latest internal/api/oas_response_decoders_gen.go
 go run github.com/plexusone/ogen-tools/cmd/ogen-fixformdata@latest internal/api/oas_request_encoders_gen.go
+go run github.com/plexusone/ogen-tools/cmd/ogen-fixbinary@latest internal/api/oas_schemas_gen.go internal/api/oas_request_encoders_gen.go
 
 # Verify
 go build ./...
